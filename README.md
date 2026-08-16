@@ -7,7 +7,7 @@ from a toolbar popup.
 
 <p align="center">
   <a href="https://github.com/maxjb-xyz/better-myucf/releases/latest/download/better-myucf.zip">
-    <img src="https://img.shields.io/github/v/release/maxjb-xyz/better-myucf?style=for-the-badge&label=%E2%AC%87%20Download%20latest&color=FFC904" alt="Download latest release">
+    <img src="https://img.shields.io/github/v/release/maxjb-xyz/better-myucf?style=for-the-badge&label=%E2%AC%87%20Download%20latest&color=FFC904&logoColor=1a1a1a" alt="Download latest release">
   </a>
   &nbsp;
   <a href="https://github.com/maxjb-xyz/better-myucf/releases">
