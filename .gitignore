@@ -1,0 +1,10 @@
+# Local PII-redacted capture snapshots — never commit.
+.context/
+
+# Built release zips (produced by the GitHub Actions workflow).
+*.zip
+dist/
+
+# OS cruft
+.DS_Store
+Thumbs.db

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>myUCF Overhaul</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">myUCF</span>
+      <span class="sub">Overhaul</span>
+    </div>
+    <label class="switch" title="Enable / disable">
+      <input type="checkbox" id="enabled">
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <section>
+    <h2>Accent</h2>
+    <div class="swatches" id="accent"></div>
+  </section>
+
+  <section>
+    <h2>Density</h2>
+    <div class="segmented" id="density"></div>
+  </section>
+
+  <section>
+    <h2>Advanced</h2>
+    <div class="row"><span>Data layer</span><label class="switch"><input type="checkbox" data-key="phase2Enabled"><span class="slider"></span></label></div>
+    <p class="hint">Intercepts PeopleSoft JSON to render custom widgets. On by default.</p>
+    <div class="row"><span>Debug logging</span><label class="switch"><input type="checkbox" data-key="debug"><span class="slider"></span></label></div>
+  </section>
+
+  <section>
+    <h2>Capture <em>for developer</em></h2>
+    <p class="hint">Saves a redacted snapshot (DOM + NavBar) as a local file to attach in chat. Text is excluded unless you opt in; personal data is stripped before saving.</p>
+    <div class="row"><span>Include text content <em>redacted</em></span><label class="switch"><input type="checkbox" data-key="captureText"><span class="slider"></span></label></div>
+    <label class="field">
+      <span>Extra terms to redact (comma-separated)</span>
+      <input type="text" id="redactTerms" placeholder="e.g. your name, NID">
+    </label>
+    <button id="capture" class="primary" type="button">Capture page</button>
+    <span id="captureStatus" class="status"></span>
+  </section>
+
+  <footer>
+    <span class="ver">v0.6.0</span>
+    <span class="sync">Settings sync automatically</span>
+  </footer>
+
+  <script src="defaults.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

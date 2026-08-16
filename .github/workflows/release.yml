@@ -1,0 +1,57 @@
+name: Release extension zip
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Validate manifest.json
+        run: python3 -c "import json; json.load(open('manifest.json')); print('manifest.json OK')"
+
+      - name: Build extension zip
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+
+          TOP = "better-myucf"
+          dist = "dist"
+          stage = os.path.join(dist, TOP)
+
+          # Clean slate
+          if os.path.exists(dist):
+              shutil.rmtree(dist)
+          os.makedirs(stage)
+
+          # Copy every extension file into a single top-level folder so that
+          # "Load unpacked" always points at a directory containing manifest.json.
+          EXCLUDE_DIRS = {".git", ".github", ".context", "dist"}
+          for root, dirs, files in os.walk("."):
+              dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith(".")]
+              for name in files:
+                  if name.startswith("."):        # .gitignore, .DS_Store, …
+                      continue
+                  src = os.path.join(root, name)
+                  rel = os.path.relpath(src, ".")
+                  dst = os.path.join(stage, rel)
+                  os.makedirs(os.path.dirname(dst), exist_ok=True)
+                  shutil.copy2(src, dst)
+
+          shutil.make_archive(os.path.join(dist, TOP), "zip", dist, TOP)
+          print("Built", os.path.join(dist, TOP + ".zip"))
+          PY
+
+      - name: Create release and attach zip
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/better-myucf.zip
+          generate_release_notes: true

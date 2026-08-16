@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "myUCF Frontend Overhaul",
+  "version": "0.6.0",
+  "description": "Client-side visual/UX improvements for my.ucf.edu and csprod-ss.net.ucf.edu (Oracle PeopleSoft Fluid). Personal-use only: never touches credentials, never sends data off the machine.",
+  "permissions": ["storage"],
+  "action": {
+    "default_title": "myUCF Overhaul",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://my.ucf.edu/*",
+        "https://m.my.ucf.edu/*",
+        "https://csprod-ss.net.ucf.edu/*"
+      ],
+      "js": ["defaults.js", "capture-utils.js", "nav.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["page-hook.js"],
+      "matches": [
+        "https://my.ucf.edu/*",
+        "https://m.my.ucf.edu/*",
+        "https://csprod-ss.net.ucf.edu/*"
+      ]
+    }
+  ]
+}

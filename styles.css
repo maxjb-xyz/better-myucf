@@ -1,0 +1,721 @@
+/* ============================================================
+   myUCF Frontend Overhaul — PeopleSoft Fluid dark theme (UCF)
+   ============================================================
+   Scoped under html.myucf-overhaul (added by content.js only after
+   PeopleSoft markup is detected).
+
+   The native myUCF PeopleSoft branding is already DARK (charcoal +
+   gold, via PT_BRAND_FLUID_TEMPLATE_*_FX_MACROSET_*.css), so this
+   theme STAYS dark and refines it — it does not fight it.
+
+   HARD RULE: `.ps_box-group` is PeopleSoft's generic LAYOUT wrapper
+   (used hundreds of times per page). Never style it as a card. Cards
+   are the homepage TILES only: `.nuilp` / `.nuitile`.
+
+   FRAGILE: PeopleSoft Fluid markup is version-specific. A selector
+   that stops matching simply falls back to stock styling.
+   ------------------------------------------------------------ */
+
+/* ============================ TOKENS ============================ */
+html.myucf-overhaul {
+  color-scheme: dark;
+  --accent: #ffc904;
+  --accent-strong: #e0b000;
+  --accent-ink: #1a1a1a;
+  --link: #ffc904;
+
+  --ink: #e8eaee;
+  --muted: #9aa4b2;
+  --line: #2a303a;
+  --surface: #1c222b;        /* cards / panels */
+  --surface-alt: #12151b;    /* page background */
+  --surface-hover: #232a36;
+
+  --fs: 14px;
+  --space: 12px;
+  --space-lg: 18px;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+/* accent themes (brightened for dark surfaces) */
+html.myucf-overhaul[data-accent="blue"] {
+  --accent: #60a5fa; --accent-strong: #3b82f6; --link: #60a5fa;
+}
+html.myucf-overhaul[data-accent="green"] {
+  --accent: #34d399; --accent-strong: #22c55e; --link: #34d399;
+}
+html.myucf-overhaul[data-accent="purple"] {
+  --accent: #a78bfa; --accent-strong: #8b5cf6; --link: #a78bfa;
+}
+
+/* density */
+html.myucf-overhaul[data-density="compact"]  { --fs: 13px; --space: 8px;  --space-lg: 12px; }
+html.myucf-overhaul[data-density="spacious"] { --fs: 15px; --space: 18px; --space-lg: 26px; }
+
+/* ============================ BASE ============================= */
+html.myucf-overhaul body {
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    Arial, sans-serif;
+  font-size: var(--fs);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--surface-alt);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+html.myucf-overhaul a { color: var(--link); }
+html.myucf-overhaul a:hover { text-decoration-thickness: 2px; }
+
+/* ============================ HEADER =========================== */
+html.myucf-overhaul .ps_header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+html.myucf-overhaul .ps_header_bar {
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent);
+  min-height: 48px;
+}
+
+/* Constrain the header to the (sidebar-reduced) content width so its
+   right-side icons stop overflowing. */
+html.myucf-has-sidebar .ps_header_bar {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+html.myucf-has-sidebar .ps_header,
+html.myucf-has-sidebar .ps_header_panel {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+html.myucf-overhaul .ps_pagetitle,
+html.myucf-overhaul .ps_pagetitle_cont {
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+html.myucf-overhaul .lphomepage_selector .ps-button {
+  color: var(--ink);
+  font-weight: 600;
+}
+html.myucf-overhaul .ps_header_button .ps-button { color: var(--ink); }
+
+/* header search */
+html.myucf-overhaul .ps_box-edit input,
+html.myucf-overhaul .ps_box-control input,
+html.myucf-overhaul .pts_search_content input {
+  background: var(--surface-alt);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+}
+html.myucf-overhaul .ps_box-edit input:focus,
+html.myucf-overhaul .ps_box-control input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+/* ============================ HOMEPAGE TILES =================== */
+html.myucf-overhaul .nuitilegrid { gap: var(--space); padding: var(--space); }
+
+/* The CARD is .nuilp — .nuitile is just the transparent grid cell. */
+html.myucf-overhaul .nuitile { background: transparent; height: 100%; }
+html.myucf-overhaul .nuilp {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  cursor: pointer;
+  height: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+html.myucf-overhaul .nuilp:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Title */
+html.myucf-overhaul .ps_groupleth {
+  color: var(--ink);
+  font-weight: 600;
+  padding: var(--space) var(--space) 0;
+}
+
+/* Live data — keep PeopleSoft's right/bottom padding (prevents overflow) */
+html.myucf-overhaul .psc_tile_livedata {
+  color: var(--muted);
+  padding: 0 var(--space) var(--space);
+}
+
+/* Metric value — muted by default */
+html.myucf-overhaul .psc_tile_livedata_item .ps_box-value {
+  color: var(--muted) !important;
+}
+
+/* Metric number — first item's value is gold + bold */
+html.myucf-overhaul .psc_tile_livedata_item:first-child .ps_box-value {
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+
+/* ============================ BUTTONS ========================== */
+html.myucf-overhaul .ps-button,
+html.myucf-overhaul .psc_button {
+  border-radius: var(--radius-sm);
+}
+
+/* ============================ MENUS / POPUPS =================== */
+html.myucf-overhaul .ps_menucontainer,
+html.myucf-overhaul .ps_popup-menu {
+  background: var(--surface);
+}
+html.myucf-overhaul .ps_menuitem {
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  transition: background 0.12s ease;
+}
+html.myucf-overhaul .ps_menuitem:hover { background: var(--surface-hover); }
+html.myucf-overhaul .ps_menusection { border-bottom: 1px solid var(--line); }
+
+/* ============================ MODALS =========================== */
+html.myucf-overhaul .ps_mod_wrap,
+html.myucf-overhaul .ps_modal_container,
+html.myucf-overhaul .ps_modal_content {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+html.myucf-overhaul .ps_modal_header,
+html.myucf-overhaul .ps_mheader-bar {
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 700;
+}
+html.myucf-overhaul .ps_masktrans,
+html.myucf-overhaul .ps_modalmask {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* ============================ GRIDS (transaction pages) ======== */
+html.myucf-overhaul .ps_grid-head,
+html.myucf-overhaul .ps_grid-head-row,
+html.myucf-overhaul .ps_grid-col,
+html.myucf-overhaul .ps_box-grid-header {
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-weight: 600;
+}
+html.myucf-overhaul .ps_grid-row { border-bottom: 1px solid var(--line); }
+html.myucf-overhaul .ps_grid-row:hover { background: var(--surface-hover); }
+html.myucf-overhaul .ps_grid-cell { padding: var(--space); }
+
+/* ============================ SIDEBAR / DASHBOARD ============== */
+/* Shift ALL in-flow content (header, wrapper, grids) right of the sidebar via
+   body padding — uniform, and avoids the double-shift a wrapper margin causes. */
+html.myucf-has-sidebar body {
+  padding-left: 240px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Remove the now-redundant native left nav rail (side1 panel). Its tabs stay
+   in the DOM so the sidebar's tab-activation routing still works — we just
+   hide PeopleSoft's own copy of the navigation. */
+html.myucf-overhaul #PT_SIDE,
+html.myucf-overhaul .pst_panel-side1 { display: none !important; }
+html.myucf-overhaul #PT_CONTENT { margin-left: 0 !important; }
+#myucf-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 18px 12px 14px;
+  background: #161a20;
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  z-index: 1000;
+}
+#myucf-sidebar .myucf-sb-brand {
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  margin-bottom: 8px;
+}
+#myucf-sidebar .myucf-sb-brandtop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#myucf-sidebar .myucf-sb-logo {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+#myucf-sidebar .myucf-sb-sub {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+}
+#myucf-sidebar .myucf-sb-sub:hover { color: var(--ink); }
+#myucf-sidebar .myucf-sb-gh {
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  transition: color 0.12s ease, background 0.12s ease;
+}
+#myucf-sidebar .myucf-sb-gh:hover { color: var(--ink); background: var(--surface-hover); }
+#myucf-sidebar .myucf-sb-gh svg { display: block; }
+#myucf-sidebar .myucf-sb-section {
+  margin: 16px 8px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+#myucf-sidebar .myucf-sb-link {
+  display: block;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+#myucf-sidebar .myucf-sb-link:hover { background: var(--surface-hover); color: var(--accent); }
+#myucf-sidebar .myucf-sb-footer { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
+#myucf-sidebar .myucf-sb-dev {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+#myucf-sidebar .myucf-sb-dev-text { line-height: 1.3; }
+#myucf-sidebar .myucf-sb-dev-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+#myucf-sidebar .myucf-sb-dev-links a {
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  transition: color 0.12s ease, background 0.12s ease;
+}
+#myucf-sidebar .myucf-sb-dev-links a:hover { color: var(--ink); background: var(--surface-hover); }
+#myucf-sidebar .myucf-sb-dev-links svg { display: block; }
+
+/* hierarchical tree: page row + expandable sub-page tabs */
+#myucf-sidebar .myucf-sb-pagerow {
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+}
+#myucf-sidebar .myucf-sb-pagerow:hover { background: var(--surface-hover); }
+#myucf-sidebar .myucf-sb-page {
+  flex: 1 1 auto;
+  padding: 10px 12px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#myucf-sidebar .myucf-sb-page:hover { color: var(--accent); }
+#myucf-sidebar .myucf-sb-page.myucf-active { color: var(--accent); }
+#myucf-sidebar .myucf-sb-caret {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin-right: 4px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+#myucf-sidebar .myucf-sb-caret:hover { color: var(--accent); background: var(--surface-hover); }
+#myucf-sidebar .myucf-sb-caret[aria-expanded="true"] { transform: rotate(90deg); }
+#myucf-sidebar .myucf-sb-sub {
+  display: none;
+  margin: 2px 0 4px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+  margin-left: 12px;
+}
+#myucf-sidebar .myucf-sb-sub.myucf-open { display: block; }
+#myucf-sidebar .myucf-sb-sublink {
+  display: block;
+  padding: 7px 8px 7px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#myucf-sidebar .myucf-sb-sublink:hover { color: var(--accent); background: var(--surface-hover); }
+#myucf-sidebar .myucf-sb-sublink.myucf-active { color: var(--accent); font-weight: 600; }
+
+.myucf-dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space) var(--space-lg);
+  margin-bottom: var(--space);
+}
+.myucf-dashboard-header .myucf-dash-greeting { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+.myucf-dashboard-header .myucf-dash-date { font-size: 13px; color: var(--muted); }
+
+/* ============================ PAGE CONTENT (base components) ============ */
+/* Page title — the main heading on every transaction page */
+html.myucf-overhaul .ps_pagetitle,
+html.myucf-overhaul .psa_pagetitle {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 var(--space) 0;
+  line-height: 1.3;
+}
+
+/* Content groups → cards. Deliberately NOT .ps_box-group, which is PeopleSoft's
+   generic layout wrapper (hundreds per page). */
+html.myucf-overhaul .ps_content-group {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  margin-bottom: var(--space);
+}
+
+/* Titled grid/group headers + PeopleSoft's gold accent banners (page header,
+   term/display switcher). !important beats the brand gold background so the
+   (often white) title text stays readable on dark. */
+html.myucf-overhaul .ps_box-grid-header,
+html.myucf-overhaul .ps_box-grid-header_bar,
+html.myucf-overhaul .ps_header-grid-custom,
+html.myucf-overhaul .ps_apps_pageheader {
+  background-color: var(--surface-alt) !important;
+  color: var(--ink);
+}
+html.myucf-overhaul .ps_box-grid-header,
+html.myucf-overhaul .ps_box-grid-header_bar {
+  border-bottom: 1px solid var(--line);
+  padding: var(--space);
+}
+html.myucf-overhaul .ps_box-grid-title {
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* Form controls */
+html.myucf-overhaul .ps_box-edit input,
+html.myucf-overhaul .ps_box-control input,
+html.myucf-overhaul .ps_box-edit textarea,
+html.myucf-overhaul .ps_box-control textarea,
+html.myucf-overhaul .ps_box-edit select,
+html.myucf-overhaul .ps_box-control select {
+  background: var(--surface-alt);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: var(--fs);
+  font-family: inherit;
+}
+html.myucf-overhaul .ps_box-edit input:focus,
+html.myucf-overhaul .ps_box-control input:focus,
+html.myucf-overhaul .ps_box-edit textarea:focus,
+html.myucf-overhaul .ps_box-control textarea:focus,
+html.myucf-overhaul .ps_box-edit select:focus,
+html.myucf-overhaul .ps_box-control select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-strong);
+}
+
+/* Field labels + read-only values */
+html.myucf-overhaul .ps_box-label,
+html.myucf-overhaul .ps-label {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+}
+html.myucf-overhaul .ps_box-value { color: var(--ink); }
+
+/* Broad dark surfaces — kill white bleeding through from PeopleSoft's base
+   theme so light text is always on dark. */
+html.myucf-overhaul .ps_main,
+html.myucf-overhaul .ps_content,
+html.myucf-overhaul .ps_pagecontainer,
+html.myucf-overhaul .ps_wrapper,
+html.myucf-overhaul .ps_mid_section {
+  background-color: var(--surface-alt);
+  color: var(--ink);
+}
+html.myucf-overhaul table,
+html.myucf-overhaul .ps_grid-body {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+html.myucf-overhaul th,
+html.myucf-overhaul td,
+html.myucf-overhaul .ps_grid-cell,
+html.myucf-overhaul .ps_grid-col {
+  background-color: transparent;
+  color: var(--ink) !important;
+}
+
+/* ============================ FORCE DARK MODE ================== */
+/* Kill PeopleSoft's gold accent backgrounds on header/title/term bands. The
+   white text on them is only readable once the background goes dark. */
+html.myucf-overhaul .ps_header,
+html.myucf-overhaul .ps_header_panel,
+html.myucf-overhaul .ps_header_bar,
+html.myucf-overhaul .ps_header_bar_cont,
+html.myucf-overhaul .ps_header_bar_custom,
+html.myucf-overhaul .ps_ag-processheader,
+html.myucf-overhaul .ps_apps_pageheader,
+html.myucf-overhaul .ps_header-grid-custom,
+html.myucf-overhaul .ps_pagetitle_cont,
+html.myucf-overhaul .ps_box-title,
+html.myucf-overhaul .ps_box-mdtitle,
+html.myucf-overhaul .ps_target-title {
+  background-color: var(--surface-alt) !important;
+}
+
+/* Force light text on content — PeopleSoft's base theme ships dark-gray text
+   colors that turn unreadable on dark surfaces. */
+html.myucf-overhaul .ps-text,
+html.myucf-overhaul .ps-label,
+html.myucf-overhaul .ps_box-value,
+html.myucf-overhaul .ps_box-label,
+html.myucf-overhaul .ps_grid-col-label,
+html.myucf-overhaul .ps_pagetitle,
+html.myucf-overhaul .ps_pagetitle_cont,
+html.myucf-overhaul .ps_groupleth {
+  color: var(--ink) !important;
+}
+
+/* Links — PeopleSoft colors many links dark-gray (including peoplecode
+   grid-select links like term switchers); force the theme link color.
+   NOTE: do NOT add a bare `a[ptlinktgt]` rule here — PeopleSoft renders many
+   action *buttons* as anchors with ptlinktgt, and that broad rule recolors a
+   gold button's face gold (unreadable). `a.ps-link` covers the term switchers. */
+html.myucf-overhaul a.ps-link,
+html.myucf-overhaul a.ps-link:link,
+html.myucf-overhaul a.ps-link:visited,
+html.myucf-overhaul a.ps-link[ptlinktgt] {
+  color: var(--link) !important;
+}
+
+/* Segmented selector bars ("by class | by date") and simple/outline buttons —
+   PeopleSoft renders them white-on-white in dark mode; force dark + light. */
+html.myucf-overhaul .ps_button_bar,
+html.myucf-overhaul .ps_button_bar .ps-button,
+html.myucf-overhaul .ps_button_bar .psc_button,
+html.myucf-overhaul .psc_button-simple {
+  background-color: var(--surface) !important;
+  color: var(--ink) !important;
+}
+
+/* Radio "pills" (selection pills) — PeopleSoft renders them light/white, but
+   the theme forces their .ps-label text light, so white-on-white. Force dark. */
+html.myucf-overhaul .ps_box-radio {
+  background-color: var(--surface) !important;
+  border-color: var(--line) !important;
+}
+html.myucf-overhaul .ps_box-radio .ps-label {
+  color: var(--ink) !important;
+}
+html.myucf-overhaul .ps_box-radio.psc_selected {
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+html.myucf-overhaul .ps_box-radio.psc_selected .ps-label {
+  color: var(--accent-ink) !important;
+}
+
+/* ==================== GLOBAL SEARCH DROPDOWN ==================== */
+/* PeopleSoft's nav-search results panel ("Search Within" / "Recently Visited"
+   / "Other Suggestions") ships LIGHT even though the header is dark. Force the
+   panel, band, and pills dark so the already-light text stays readable. Targeted
+   at the search-specific classes — never the generic .ps_box-group. */
+
+html.myucf-overhaul .pts_results_grid {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+/* Kill any light backgrounds PeopleSoft paints inside the dropdown. */
+html.myucf-overhaul .pts_brdcrmhdr,
+html.myucf-overhaul .pts_results_grid .ps_box-grid,
+html.myucf-overhaul .pts_results_grid .ps_grid-list,
+html.myucf-overhaul .pts_results_grid .ps_content-group {
+  background: transparent !important;
+}
+html.myucf-overhaul .pts_brdcrmhdr { border-bottom: 1px solid var(--line); }
+
+/* "Search Within" heading = ink; "Recently Visited" / "Other Suggestions" = muted */
+html.myucf-overhaul .pts_searchwithin,
+html.myucf-overhaul .pts_searchwithin .ps-text { color: var(--ink) !important; }
+html.myucf-overhaul .pts_recentVis .ps_header-group,
+html.myucf-overhaul .pts_recentVis .ps_header-group .ps-text,
+html.myucf-overhaul .pts_othSugg .ps_header-group,
+html.myucf-overhaul .pts_othSugg .ps_header-group .ps-text {
+  color: var(--muted) !important;
+}
+
+/* Breadcrumb pills — "Menu", "All Categories" */
+html.myucf-overhaul .pts_breadcrumblabel a.ps-button {
+  background: var(--surface-alt) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+html.myucf-overhaul .pts_breadcrumblabel a.ps-button .ps-text {
+  color: var(--ink) !important;
+}
+html.myucf-overhaul .pts_breadcrumblabel a.ps-button.ptsf_brdcrmb_hghlt {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+html.myucf-overhaul .pts_breadcrumblabel a.ps-button.ptsf_brdcrmb_hghlt .ps-text {
+  color: var(--accent-ink) !important;
+}
+
+/* Result rows */
+html.myucf-overhaul .pts_results_grid .ps_grid-row {
+  background: transparent !important;
+  border-bottom: 1px solid var(--line);
+}
+html.myucf-overhaul .pts_results_grid .ps_grid-row:hover {
+  background: var(--surface-hover) !important;
+}
+
+/* Result links: title ink/bold, summary muted */
+html.myucf-overhaul .pts_link_title { color: var(--ink) !important; font-weight: 600; }
+html.myucf-overhaul .pts_link_summary { color: var(--muted) !important; font-weight: 400; }
+
+/* "Clear All" / "See More" / "See All" inline links */
+html.myucf-overhaul .pts_results_grid .pts_floatryt .ps-button,
+html.myucf-overhaul .pts_results_grid .pts_see_all .ps-button {
+  color: var(--link) !important;
+  background: transparent !important;
+}
+
+/* "No results to display" */
+html.myucf-overhaul .pts_message,
+html.myucf-overhaul .pts_message .ps-text { color: var(--muted) !important; }
+
+/* Data grids — airy, borderless, less blocky */
+html.myucf-overhaul .ps_grid-head,
+html.myucf-overhaul .ps_grid-head-row,
+html.myucf-overhaul .ps_grid-col {
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px var(--space);
+  border: none;
+  border-bottom: 1px solid var(--line);
+}
+html.myucf-overhaul .ps_grid-row {
+  border: none;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.12s ease;
+}
+html.myucf-overhaul .ps_grid-row:hover { background: var(--surface-hover); }
+html.myucf-overhaul .ps_grid-cell {
+  padding: 12px var(--space);
+  color: var(--ink);
+  border: none;
+}
+
+/* Metrics / live-data numbers */
+html.myucf-overhaul .psc_livedata-metrics {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Buttons — consistent hover/active */
+html.myucf-overhaul .ps-button,
+html.myucf-overhaul .psc_button {
+  border-radius: var(--radius-sm);
+  transition: filter 0.12s ease, box-shadow 0.12s ease;
+}
+html.myucf-overhaul .ps-button:hover,
+html.myucf-overhaul .psc_button:hover { filter: brightness(1.1); }
+
+/* Themed scrollbars (Chrome) */
+html.myucf-overhaul ::-webkit-scrollbar { width: 10px; height: 10px; }
+html.myucf-overhaul ::-webkit-scrollbar-track { background: transparent; }
+html.myucf-overhaul ::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+html.myucf-overhaul ::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-hover);
+  background-clip: padding-box;
+}
+
+/* Text selection */
+html.myucf-overhaul ::selection {
+  background: var(--accent-strong);
+  color: var(--accent-ink);
+}
+
+/* ============================ REDUCED MOTION =================== */
+@media (prefers-reduced-motion: reduce) {
+  html.myucf-overhaul *,
+  html.myucf-overhaul *::before,
+  html.myucf-overhaul *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
