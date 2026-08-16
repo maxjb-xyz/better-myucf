@@ -1,5 +1,7 @@
 # myUCF Frontend Overhaul
 
+<img width="1502" height="815" alt="image" src="https://github.com/user-attachments/assets/7bfac515-070d-4044-9127-abea99f5b497" />
+
 A personal-use Chrome extension (Manifest V3) that improves the visual/UX
 layer of **my.ucf.edu** (Oracle PeopleSoft Campus Solutions, Fluid UI). It runs
 entirely client-side inside your own authenticated session and is controlled
